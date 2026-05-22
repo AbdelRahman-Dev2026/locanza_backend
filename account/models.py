@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import BaseUserManager
+
 
 # user العادي
 class User(AbstractUser):
@@ -9,8 +11,9 @@ class User(AbstractUser):
     # كل مستخدم لازم يكون عنده email مختلف
     email = models.EmailField(unique=True)
 
-    # إيه الحقل الأساسي اللي المستخدم هيسجل بيه الدخول؟
-    USERNAME_FIELD = 'email'
+
+    USERNAME_FIELD = 'email'# إيه الحقل الأساسي اللي المستخدم هيسجل بيه الدخول؟
+
     # يعني مفيش حقول إضافية إجبارية وقت إنشاء user
     # "إيه الحقول الإضافية المطلوبة وقت إنشاء superuser
     REQUIRED_FIELDS =['phone_number']
@@ -40,6 +43,32 @@ class Serviceprofile(models.Model):
     location = models.CharField(max_length = 100)
     working_hours = models.IntegerField()
     description = models.TextField()
+
+
+# user التعديل فى تسجيل المستخدم
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields ):
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save
+        return user
+
+    def create_superuser(self, email, password , **extra_fields ):
+
+        extra_fields.setdefault('is_staff', True) # هل الحقل دا موجود وله
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)  # هل الحساب “مفعل وشغال” ولا “مقفول”ده يحدد
+        return self.create_user(email, password, **extra_fields)
+
+
+
+
+
+
 
 
 class location(models.Model):
