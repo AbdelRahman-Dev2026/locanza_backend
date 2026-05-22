@@ -3,48 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 
 
-# user العادي
-class User(AbstractUser):
-    # ودا معانه أنا مش عاوز username نهائي"
-    username = None
-
-    # كل مستخدم لازم يكون عنده email مختلف
-    email = models.EmailField(unique=True)
-
-
-    USERNAME_FIELD = 'email'# إيه الحقل الأساسي اللي المستخدم هيسجل بيه الدخول؟
-
-    # يعني مفيش حقول إضافية إجبارية وقت إنشاء user
-    # "إيه الحقول الإضافية المطلوبة وقت إنشاء superuser
-    REQUIRED_FIELDS =['phone_number']
-
-    # دي بتحدد أنواع المستخدمين
-    Role_CHOICES = (
-        ("user", "User"),
-        ("service_provider", "Service_provider"),
-    )
-
-
-    phone_number = models.CharField(max_length = 100)
-    password = models.CharField(max_length = 100)
-    role = models.CharField(
-        max_length = 100,
-        choices = Role_CHOICES,
-        default = "user",
-    #     ودا كل user لازم يكون نوع معين من اللي انا عاملهم
-    )
-
-
-# userالمستخدم صاحب الخدمة
-class Serviceprofile(models.Model):
-    # اولا الرابط بي user
-    owner = models.ForeignKey(User, on_delete= models.CASCADE)
-    image = models.ImageField(upload_to = 'images/')
-    location = models.CharField(max_length = 100)
-    working_hours = models.IntegerField()
-    description = models.TextField()
-
-
 # user التعديل فى تسجيل المستخدم
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields ):
@@ -54,7 +12,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save
+        user.save()
         return user
 
     def create_superuser(self, email, password , **extra_fields ):
@@ -65,9 +23,43 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+# user العادي
+class User(AbstractUser):
+    # ودا معانه أنا مش عاوز username نهائي"
+    username = None
 
+    # كل مستخدم لازم يكون عنده email مختلف
+    email = models.EmailField(unique=True)
 
+    USERNAME_FIELD = 'email'# إيه الحقل الأساسي اللي المستخدم هيسجل بيه الدخول؟
 
+    # يعني مفيش حقول إضافية إجبارية وقت إنشاء user
+    # "إيه الحقول الإضافية المطلوبة وقت إنشاء superuser
+    REQUIRED_FIELDS =['phone_number']
+
+    objects = CustomUserManager()
+    # دي بتحدد أنواع المستخدمين
+    Role_CHOICES = (
+        ("user", "User"),
+        ("service_provider", "Service_provider"),
+    )
+
+    phone_number = models.CharField(max_length = 100)
+    role = models.CharField(
+        max_length = 100,
+        choices = Role_CHOICES,
+        default = "user",
+    #     ودا كل user لازم يكون نوع معين من اللي انا عاملهم
+    )
+
+# userالمستخدم صاحب الخدمة
+class Serviceprofile(models.Model):
+    # اولا الرابط بي user
+    owner = models.ForeignKey(User, on_delete= models.CASCADE)
+    image = models.ImageField(upload_to = 'images/')
+    location = models.CharField(max_length = 100)
+    working_hours = models.IntegerField()
+    description = models.TextField()
 
 
 
