@@ -22,14 +22,12 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)  # هل الحساب “مفعل وشغال” ولا “مقفول”ده يحدد
         return self.create_user(email, password, **extra_fields)
 
-
 # user العادي
 class User(AbstractUser):
-    # ودا معانه أنا مش عاوز username نهائي"
-    username = None
 
-    # كل مستخدم لازم يكون عنده email مختلف
-    email = models.EmailField(unique=True)
+    username = None   # ودا معانه أنا مش عاوز username نهائي"
+
+    email = models.EmailField(unique=True)  # كل مستخدم لازم يكون عنده email مختلف
 
     USERNAME_FIELD = 'email'# إيه الحقل الأساسي اللي المستخدم هيسجل بيه الدخول؟
 
@@ -56,6 +54,7 @@ class User(AbstractUser):
 class Serviceprofile(models.Model):
     # اولا الرابط بي user
     owner = models.ForeignKey(User, on_delete= models.CASCADE)
+    business_name = models.CharField(max_length = 100)
     image = models.ImageField(upload_to = 'images/')
     location = models.CharField(max_length = 100)
     working_hours = models.IntegerField()
@@ -68,10 +67,6 @@ class location(models.Model):
 
 
 # Create your models here.
-
-
-
-
 
 
 # **============================**
