@@ -50,15 +50,7 @@ class User(AbstractUser):
     #     ودا كل user لازم يكون نوع معين من اللي انا عاملهم
     )
 
-# userالمستخدم صاحب الخدمة
-class Serviceprofile(models.Model):
-    # اولا الرابط بي user
-    owner = models.ForeignKey(User, on_delete= models.CASCADE)
-    business_name = models.CharField(max_length = 100)
-    image = models.ImageField(upload_to = 'images/')
-    location = models.CharField(max_length = 100)
-    working_hours = models.IntegerField()
-    description = models.TextField()
+
 
 
 

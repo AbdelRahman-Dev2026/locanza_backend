@@ -12,7 +12,7 @@ from .models import User
 
 
 class RegisterUser(APIView):
-    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         permission_classes = [permissions.AllowAny]
@@ -24,9 +24,7 @@ class RegisterUser(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-    def get(self, requset, pk=None):
-
+    def get(self, request, pk=None):
 
         if pk is None:  # ول مفيش pk رجع كل users
             user = User.objects.all()
@@ -58,7 +56,10 @@ class RegisterUser(APIView):
 
 
     def delete(self, request, pk):
-        user = User.objcets.get(id=pk)
+        user = User.objects.get(id=pk)
+        if request.user == user:
+            return Response(status=status.HTTP_403_FORBIDDEN_NO_CONTENT )
+
         user.delete()
         return Response(
             {"message": "Deleted successfully"},
@@ -102,8 +103,6 @@ class Change_password(APIView):
             {"error": "Password not changed"},
             status=status.HTTP_400_BAD_REQUEST
         )
-
-
 
 
 
