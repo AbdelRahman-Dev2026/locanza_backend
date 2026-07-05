@@ -17,26 +17,26 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password , **extra_fields ):
 
-        extra_fields.setdefault('is_staff', True) # هل الحقل دا موجود وله
+        #  "لو الحاجة مش متعرفة، حطها تلقائي"
+        extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)  # هل الحساب “مفعل وشغال” ولا “مقفول”ده يحدد
+        extra_fields.setdefault('is_active', True)
         return self.create_user(email, password, **extra_fields)
 
-# user العادي
+
 class User(AbstractUser):
 
-    username = None   # ودا معانه أنا مش عاوز username نهائي"
+    username = None
 
-    email = models.EmailField(unique=True)  # كل مستخدم لازم يكون عنده email مختلف
+    email = models.EmailField(unique=True)
 
-    USERNAME_FIELD = 'email'# إيه الحقل الأساسي اللي المستخدم هيسجل بيه الدخول؟
+    USERNAME_FIELD = 'email'
 
-    # يعني مفيش حقول إضافية إجبارية وقت إنشاء user
     # "إيه الحقول الإضافية المطلوبة وقت إنشاء superuser
     REQUIRED_FIELDS =['phone_number']
 
     objects = CustomUserManager()
-    # دي بتحدد أنواع المستخدمين
+
     Role_CHOICES = (
         ("user", "User"),
         ("service_provider", "Service_provider"),
@@ -44,13 +44,7 @@ class User(AbstractUser):
 
     phone_number = models.CharField(max_length = 100)
     role = models.CharField(
-        max_length = 100,
-        choices = Role_CHOICES,
-        default = "user",
-    #     ودا كل user لازم يكون نوع معين من اللي انا عاملهم
-    )
-
-
+        max_length = 100,  choices = Role_CHOICES,default = "user",)
 
 
 

@@ -1,14 +1,19 @@
 from django.urls import path
 
+from rest_framework.routers import DefaultRouter
+
 from .views import *
 
+
+router = DefaultRouter()
+
+router.register('banners', BannerViewSet)
+router.register('sliders', SliderViewSet)
+router.register('home-categories', HomeCategoryViewSet)
+
 urlpatterns = [
-    path('banners/',BannerListCreateView.as_view(), name='BannerListCreate'),
-    path('banners/<int:pk>/',BannerDetailView.as_view(), name='BannerDetail'),
-
-    path('sliders/',SliderListCreateView.as_view(), name='SliderListCreate'),
-    path('sliders/<int:pk>/',SliderDetailView.as_view(), name='SliderDetail'),
-
-    path('home-categories/',HomeCategoryListCreateView.as_view(), name='HomeCategoryListCreate'),
-    path('home-categories/<int:pk>/',HomeCategoryDetailView.as_view(), name='HomeCategoryDetail'),
+    path('home/', CoreView.as_view(), name='core-home-page'),
 ]
+
+urlpatterns += router.urls
+

@@ -32,6 +32,7 @@ urlpatterns = [
     path('payment/',include('payment.urls')),
     path('core/',include('core.urls')),
 
+
 ]
 
 

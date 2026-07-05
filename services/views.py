@@ -2,42 +2,38 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .models import Category,Serviceprofile,Product
 
-from rest_framework.permissions import (
-AllowAny,
-IsAuthenticated,
-IsAdminUser,
-)
+from rest_framework.permissions import (AllowAny,IsAuthenticated,IsAdminUser)
 
 from .permissions import IsOwnerOrAdmin, IsProductOwnerOrAdmin
-from .serializer import(
-    CategorySerializer,
-    ServiceProfileSerializer,
-    ProductSerializer
-    )
 
-# Create your views here.
+from .serializer import (CategorySerializer,ServiceProfileSerializer,ProductSerializer)
+
+
 
 class CategoryViewSet(ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
         return [IsAdminUser()]
 
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
 
 class ServiceProfileViewSet(ModelViewSet):
-    queryset = Serviceprofile.objects.all()
-    serializer_class = ServiceProfileSerializer
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
+
         if self.action in ['create']:
             return [IsAuthenticated()]
 
         return [IsOwnerOrAdmin()]
+
+    queryset = Serviceprofile.objects.all()
+    serializer_class = ServiceProfileSerializer
 
 
 class ProductViewSet(ModelViewSet):
@@ -46,10 +42,10 @@ class ProductViewSet(ModelViewSet):
 
     # الصلاحيات تتغير حسب العملية الحالية
     def get_permissions(self):
-        # أي شخص يقدر يشوف المنتجات
+
         if self.action in ['list', 'retrieve']:
-            return [AllowAny()]
-        # لازم يكون عامل login عشان يضيف منتج
+            return [AllowAny()]# أي شخص يقدر يشوف المنتجات
+
         if self.action in ['create']:
             return [IsAuthenticated()]
         return [IsProductOwnerOrAdmin()]
@@ -57,6 +53,7 @@ class ProductViewSet(ModelViewSet):
 
 
 
+# Create your views here.
 
 
 

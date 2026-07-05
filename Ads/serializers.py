@@ -3,10 +3,9 @@ from rest_framework import serializers
 from .models import Ad
 
 
-#يرجع Api معنية
+
 class AdListSerializer(serializers.ModelSerializer):
 
-    # هات اسم الخدمة المرتبط بها الإعلان
     service_name = serializers.CharField(
         source='service.business_name',
         read_only=True
@@ -34,7 +33,6 @@ class AdDetailSerializer(serializers.ModelSerializer):
         model = Ad
         fields = '__all__'
 
-        # لا يمكن ولا يسطيع التعديل
         read_only_fields = (
            'owner',
            'payment_status',

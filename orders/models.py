@@ -25,16 +25,18 @@ class Orders(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    service = models.ForeignKey(
-        Serviceprofile, on_delete=models.CASCADE, related_name='orders')
+    service = models.ForeignKey(Serviceprofile, on_delete=models.CASCADE, related_name='orders')
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-    status = models.CharField(
-        max_length=20, choices=OrderStatus, default='pending')
+    status = models.CharField(max_length=20, choices=OrderStatus, default='pending')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return (f"order {self.product}")
+
 
 
 
@@ -73,10 +75,3 @@ class Orders(models.Model):
 # أريد استقبال الطلبات وإدارتها
 # حتى أتمكن من متابعة العملاء وتنفيذ الطلبات.
 #===============================================
-# حالات الطلب (Order Status)
-# Pending
-# Accepted
-# Preparing
-# On Delivery
-# Completed
-# Cancelled

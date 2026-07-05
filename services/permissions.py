@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-#  صلاحية خاصة بالخدمات:
+
 #  تسمح لصاحب الخدمة أو الأدمن فقط بتعديل أو حذف الخدمة.
 class IsOwnerOrAdmin(BasePermission):
 
@@ -11,7 +11,6 @@ class IsOwnerOrAdmin(BasePermission):
         return obj.owner == request.user
 
 
-# صلاحية خاصة بالمنتجات:
 # تسمح لصاحب الخدمة المرتبط بها المنتج أو الأدمن فقط
 # بتعديل أو حذف المنتج.
 

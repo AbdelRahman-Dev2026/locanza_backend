@@ -36,37 +36,26 @@ class PaymentMethod(models.TextChoices):
     ONLINE = ('online', 'Online')
 
 
-
 class Payment(models.Model):
 
     user = models.ForeignKey(
         User,on_delete=models.CASCADE, related_name='payments')
 
     # الطلب المرتبط بالدفع
-    order = models.ForeignKey(
-        Orders,on_delete=models.CASCADE,related_name='payments')
+    order = models.ForeignKey(Orders,on_delete=models.CASCADE, related_name='payments')
 
-    # قيم الدفع او قيمة الدفع
-    amount = models.DecimalField(
-        max_digits=10,  decimal_places=2 )
+    #  قيمة الدفع
+    amount = models.DecimalField( max_digits=10,  decimal_places=2 )
 
-    #  طرق او طريقة الدفع
-    method = models.CharField(
-        max_length=20, choices=PaymentMethod.choices, default=PaymentMethod.CASH)
+    #  طريقة الدفع
+    method = models.CharField(max_length=20, choices=PaymentMethod.choices, default=PaymentMethod.CASH)
 
-    # حالة الدفع
-    status = models.CharField(
-        max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING )
+    status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING )
 
     # رقم العملية المالية
-    transaction_id = models.CharField(
-        max_length=255,blank=True,null=True
-    )
+    transaction_id = models.CharField(max_length=255,blank=True,null=True)
 
-    # وقت الإنشاء
     created_at = models.DateTimeField(auto_now_add=True )
-
-    # وقت التعديل
     updated_at = models.DateTimeField( auto_now=True)
 
 

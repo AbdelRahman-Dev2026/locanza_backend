@@ -13,12 +13,16 @@ class CategorySerializer(serializers.ModelSerializer):
 class ServiceProfileSerializer(serializers.ModelSerializer):
 
     # ليعرض إيميل صاحب النشاط.
-    owner_email = serializers.EmailField(
-        source='owner.email',
+    # owner_email = serializers.EmailField(
+    #     source='owner.email',
+    #     read_only=True
+    # )
+
+    business_name = serializers.CharField(
+        source='business_name',
         read_only=True
     )
 
-    # ليعرض اسم القسم بدل إظهار رقم الـ ID فقط.
     category_name = serializers.CharField(
         source='category.name',
         read_only=True
@@ -34,10 +38,4 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
-
-
-    # class Meta:
-    #     model = Category
-    #     fields = ('id', 'name')
-    #
 

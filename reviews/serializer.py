@@ -16,5 +16,4 @@ class ReviewsSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'user',
             'created_at',
-            'likes_count',
         )

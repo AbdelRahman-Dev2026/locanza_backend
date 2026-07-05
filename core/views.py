@@ -3,65 +3,78 @@ from rest_framework.response import Response
 
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 
-from rest_framework.generics import (
-    ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView
-)
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 
 from .models import Banner,Slider,HomeCategory
 from .serializer import BannerSerializer,SliderSerializer,HomeCategorySerializer
 
+from Ads.models import Ad
 
-class BannerListCreateView(ListCreateAPIView):
+from Ads.serializers import  AdListSerializer
 
-    permission_classes = [IsAdminUser]
+
+class BannerViewSet(ModelViewSet):
+
     serializer_class = BannerSerializer
-    def get_queryset(self):
-        return Banner.objects.filter(is_active=True)
-
-
-class BannerDetailView(RetrieveUpdateDestroyAPIView):
-
     queryset = Banner.objects.all()
 
-    serializer_class = BannerSerializer
-    permission_classes = [IsAdminUser]
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
 
+        return [IsAuthenticated()]
 
-class SliderListCreateView(ListCreateAPIView):
-
-    permission_classes = [IsAdminUser]
+class SliderViewSet(ModelViewSet):
     serializer_class = SliderSerializer
-    def get_queryset(self):
-        return Slider.objects.filter(is_active=True)
-
-
-class SliderDetailView(RetrieveUpdateDestroyAPIView):
-
     queryset = Slider.objects.all()
-    serializer_class = SliderSerializer
-    permission_classes = [IsAdminUser]
-
-class HomeCategoryListCreateView(ListCreateAPIView):
 
     def get_permissions(self):
-        if self.request.method == 'GET':
-            return [AllowAny(), ]
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
 
-        if self.request.method == 'POST':
-            return [IsAdminUser, ]
+        return [IsAuthenticated()]
+
+
+class HomeCategoryViewSet(ModelViewSet):
 
     serializer_class = HomeCategorySerializer
-
-    def get_queryset(self):
-        return HomeCategory.objects.filter(is_active=True)
-
-
-class HomeCategoryDetailView(RetrieveUpdateDestroyAPIView):
-
     queryset = HomeCategory.objects.all()
-    serializer_class = HomeCategorySerializer
-    permission_classes = [IsAdminUser]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+
+        return [IsAuthenticated()]
+
+class CoreView(APIView):
+    def get(self, request):
+
+        benners = Banner.objects.filter(is_active=True)
+
+        sliders = Slider.objects.filter(is_active=True)
+        categories = HomeCategory.objects.filter(is_active=True)
+        sponsors = Ad.objects.filter(is_active=True,ad_status='sponsored')
+        featured = Ad.objects.filter(is_active=True,).order_by('-created_at')
+        
+        popular = Ad.objects.filter(is_active=True,).order_by('-quantity')
+
+        data = {
+            "banners": BannerSerializer(benners, many=True).data,
+            "sliders": SliderSerializer(sliders, many=True).data,
+            "categories": HomeCategorySerializer(categories, many=True).data,
+            "sponsored_ads": AdListSerializer(sponsors, many=True).data,
+            "featured_ads": AdListSerializer(featured, many=True).data,
+            "popular_ads": AdListSerializer(popular, many=True).data,
+        }
+        return Response(data)
+
+
+
+
+
+
+
 
 
 

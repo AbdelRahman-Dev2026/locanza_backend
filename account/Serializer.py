@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
+
 from .models import User
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, )
+    password = serializers.CharField(required=True,write_only=True, )
+
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -14,10 +20,9 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
         extra_kwargs = {
-            'password': {
-                'write_only': True, }
+            'password': {'write_only': True, }
         }
-
+    # انشاء user استدعائه
     def create(self, validated_data ):
         user = User.objects.create_user(
 
@@ -27,7 +32,6 @@ class UserSerializer(serializers.ModelSerializer):
             role = validated_data['role']
 
         )
-
         return user
 
 

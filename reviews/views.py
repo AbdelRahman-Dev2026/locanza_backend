@@ -24,49 +24,34 @@ class ReviewsView(APIView):
     def get(self,request):
         review = Review.objects.all()
 
-        serializer = ReviewsSerializer(
-            review,
-            many=True
-        )
+        serializer = ReviewsSerializer( review, many=True )
 
-        return Response(serializer.data)
-
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
     def post(self,request):
 
-        serializer = ReviewsSerializer(
-            data=request.data,
-        )
-        if serializer.is_valid():
-            serializer.save(
-                user=request.user,
-            )
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        serializer = ReviewsSerializer(data=request.data,)
 
+        if serializer.is_valid():
+            serializer.save( user=request.user,)
+
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+            serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     def put(self,request,pk):
 
-        review = Review.objects.get(id=pk)
-        serializer = ReviewsSerializer(
-            review,
-            data=request.data,
-        )
+        reviews = Review.objects.get(id=pk)
+        serializer = ReviewsSerializer(reviews, data=request.data,)
 
         if serializer.is_valid():
-            serializer.save(
-                user=request.user,
-            )
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            serializer.save(user=request.user,)
 
+            return Response(serializer.data,)
         return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+            serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self,request,pk):
         try:
             review = Review.objects.get(id=pk)

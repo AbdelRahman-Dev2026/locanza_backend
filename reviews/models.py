@@ -14,10 +14,7 @@ class Review(models.Model):
     user = models.ForeignKey(user,on_delete=models.CASCADE)
 
     service = models.ForeignKey(
-        Serviceprofile,
-        on_delete=models.CASCADE,
-        related_name="reviews"
-    )
+        Serviceprofile,on_delete=models.CASCADE, related_name="reviews")
 
     rating = models.PositiveIntegerField(
         default=1,
@@ -26,6 +23,7 @@ class Review(models.Model):
             MaxValueValidator(10)
         ]
     )
+
     likes_count = models.IntegerField(default=0)
     comment = models.TextField(blank=True)
 

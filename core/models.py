@@ -7,7 +7,7 @@ User = get_user_model()
 class Banner(models.Model):
 
     title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='banner/%Y/%m')
+    image = models.ImageField(blank= True, upload_to='banner/%Y/%m')
     link = models.URLField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
@@ -15,11 +15,10 @@ class Banner(models.Model):
     def __str__(self):
         return self.title
 
-# دي خاصة بي الصور المتحركة
 class Slider(models.Model):
 
     title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='slider/%Y/%m')
+    image = models.ImageField(blank= True,upload_to='slider/%Y/%m')
     # ترتيب رقم Sliders
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -28,7 +27,7 @@ class Slider(models.Model):
     def __str__(self):
         return self.title
 
-# اقسام الصفحة الرئيسية
+
 class HomeCategory(models.Model):
     title = models.CharField(max_length=200)
     # تظيم شكل واسم urls

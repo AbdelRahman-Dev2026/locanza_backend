@@ -23,9 +23,8 @@ class PaymentView(APIView):
     def post(self,request):
         serializer = PaymentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(
-                user=request.user,
-            )
+            serializer.save(user=request.user,)
+
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(
             serializer.errors,status=status.HTTP_400_BAD_REQUEST)
@@ -39,20 +38,16 @@ class PaymentDetailView(APIView):
             payment = Payment.objects.get(user=request.user, pk=pk)
 
         except Payment.DoesNotExist:
-            return Response(
-           {"message": "Payment not found"},
-                status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Payment not found"},status=status.HTTP_404_NOT_FOUND)
 
         serializer = PaymentSerializer(payment,data=request.data)
         if serializer.is_valid():
-            serializer.save(
-                user=request.user,
-            )
+            serializer.save(user=request.user,)
+
             return Response(serializer.data,status=status.HTTP_200_OK)
 
         return Response(
             serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-
 
     def patch(self,request,pk):
         try:
@@ -65,9 +60,9 @@ class PaymentDetailView(APIView):
         payment.status = PaymentStatus.CANCEL
         payment.save()
         return Response(
-            {"message": "Payment Successfully cancelled"},
-            status=status.HTTP_200_OK
-        )
+            {"message": "Payment Successfully cancelled"},status=status.HTTP_200_OK)
+
+
 
 
 

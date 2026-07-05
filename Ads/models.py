@@ -21,7 +21,6 @@ class Ad(models.Model):
     ('failed', 'Failed'),
     )
 
-    # علاقات الربط
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     service = models.ForeignKey(Serviceprofile, on_delete=models.CASCADE, null=True, blank=True,)
@@ -29,7 +28,7 @@ class Ad(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True,)
 
     title = models.CharField(max_length=150)
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True, upload_to='images/')
     description = models.TextField()
     link = models.URLField(null=True, blank=True)
 
@@ -39,12 +38,9 @@ class Ad(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2 ,default=0)
     quantity = models.PositiveIntegerField(default=0)
 
-
-    # هل الإعلان شغال أو لا؟
     is_active = models.BooleanField(default=True)
-    # يتسجل الوقت مرة واحدة فقط عند إنشاء السجل
+
     created_at = models.DateTimeField(auto_now_add=True)
-    # يتحدث تلقائيًا كل مرة يتم تعديل السجل
     updated_at = models.DateTimeField(auto_now=True)
 
     started_at = models.DateTimeField(null=True, blank=True)
